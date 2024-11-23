@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Album</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/static/styles/new_playlist.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/music-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/music-16.png">
+  </head>
+  <body>
+    <div class="header">
+      <h3>Music Streaming Application</h3>
+      <ul class="nav">
+        <li class="nav-item">
+          <form class="input-group" method="POST", action="/user/search">
+            <input type="search" name="search" class="form-control" style="width: 120px; margin:0px;" 
+            placeholder="Search"/>
+            <input type="submit" class="btn btn-info btn-sm" value="🔍" style="height: 31px; 
+            padding: 0px; background-color: lightblue; margin-right:15px;"/>
+          </form>
+        </li>
+        |
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('user_dash') }}">User Account</a>
+        </li>
+        |
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('creator_dash') }}">Profile</a>
+        </li>
+        |
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        </li>
+      </ul>
+    </div>
+    <hr />
+    <div class="header" style="margin-left: 15px; margin-right: 15px">
+      <b><h2>Edit Album : </h2></b>
+      <ul class="nav">
+        <li class="nav-item">
+          <form class="container-fluid" method="POST" action="{{ url_for('edit_album', id=album.id) }}">
+            <input type="text" class="form-control" style="text-align: center; 
+            background-color: azure" placeholder="Enter Album Name" name="album_name" value="{{album.name}}"/>
+          </div>
+    <div class="blox">
+      {% for song in songs %}
+      <div class="box-s">
+        <div class="header">
+          <h6>{{song.title}}</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="{{song.id}}" name="song_ids"
+              {% if song.id in current_song_ids %} checked {% endif %}/>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+    <div class="msg">
+        {% if error %}
+            <p style="margin: 0px">{{ error }}</p>
+        {% endif %}
+    </div>
+    <div class="centered">
+        <input type="submit" class="btn btn-success"  value="Edit"/>
+    </div>
+  </form>
+</body>
+</html>

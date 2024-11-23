@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/static/styles/user_dash.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/music-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/music-16.png">
+  </head>
+  <body>
+    <div class="header">
+      <h3>Music Streaming Application</h3>
+      <ul class="nav">
+        <li class="nav-item">
+          <form class="input-group" method="POST", action="{{ url_for('search') }}">
+            <input type="search" name="search" class="form-control" style="width: 120px; margin:0px;" 
+            placeholder="Search"/>
+            <input type="submit" class="btn btn-info btn-sm" value="🔍" style="height: 31px; 
+            padding: 0px; background-color: lightblue; margin-right:15px;"/>
+          </form>
+        </li>
+        |
+        <li class="nav-item">
+          {% if current_user.is_authenticated and current_user.creator %}
+            {% if current_user.songs %}
+              <a class="nav-link" href="{{ url_for('creator_dash') }}">Creator Account</a>
+            {% else %}
+              <a class="nav-link" href="{{ url_for('new_creator') }}">Creator Account</a>
+            {% endif %}
+          {% else %}
+            <a class="nav-link" href="{{ url_for('register_creator') }}">Creator Account</a>
+          {% endif %}
+        </li>
+        |
+        <li class="nav-item">
+          <a class="nav-link" href="#">Profile</a>
+        </li>
+        |
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        </li>
+      </ul>
+    </div>
+    <hr />
+    <div class="box">
+      <div class="row">
+        <div class="header" style="margin-left: 15px; margin-right: 15px; padding-right: 15px">
+          <h5>Recommended Tracks</h5>
+          <ul class="nav">
+            <li class="nav-item">
+              <a href="{{ url_for('user_songs') }}" class="btn btn-secondary btn-sm" 
+                style="background: cornflowerblue">Show More</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col">
+          {% for song in songs %}
+            <div class="box-sm">
+              <em>{{ song.title }}</em><br /><br />
+              <audio controls>
+                <source src="{{ url_for('static', filename='audio/' + song.filename) }}" type="audio/mpeg">
+              </audio><br />
+              <a href="{{ url_for('song_details', id=song.id) }}" class="btn btn-info btn-sm">Read Lyrics</a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="header" style="margin-left: 15px; margin-right: 15px; 
+                                   padding-top: 15px; padding-right: 18px;">
+          <h5>Your Playlist</h5>
+          <ul class="nav">
+            <li class="nav-item">
+              <a href="{{ url_for('new_playlist') }}" class="btn btn-secondary btn-sm" 
+                style="background: cornflowerblue">Create New Playlist</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col">
+          {%if playlists%}
+            {% for playlist in playlists %}
+              <div class="box-sm" style="padding-left: 25px; padding-right:25px;
+                                        padding-bottom:18px; padding-top:20px;">
+                <em>{{ playlist.name }}</em><br /><br />
+                <a href="{{ url_for('view_playlist', id=playlist.id) }}" class="btn btn-info btn-sm">
+                  View Tracks</a>
+              </div>
+            {% endfor %}
+          {%else%}
+            <div class="msg">
+              You have not created any playlists yet.
+            </div>
+          {%endif%}
+        </div>
+      </div>
+
+        <div class="row">
+        <div class="header" style="margin-left: 15px; margin-right: 15px; 
+                                   padding-top: 15px; padding-right: 18px;">
+          <h5>Albums</h5>
+        </div>
+        <div class="col">
+          {%if albums%}
+            {% for album in albums %}
+              <div class="box-sm" style="padding-left: 25px; padding-right:25px;
+                                        padding-bottom:18px; padding-top:20px;">
+                <em>{{ album.name }}</em><br /><br />
+                <a href="{{ url_for('view_album', id=album.id) }}" class="btn btn-info btn-sm">View Tracks</a>
+              </div>
+            {% endfor %}
+          {%else%}
+            <div class="msg">
+              Sorry, no albums are available currently.
+            </div>
+          {%endif%}
+        </div>
+      </div>
+
+      
+
+      {% for genre in genres | sort %}
+      <div class="row">
+        <div class="genre">
+          <div class="header" style="margin-left: 15px; margin-right: 15px; padding-top: 15px">
+            <h5>{{genre[0]}}</h5>
+          </div>
+          <div class="col">
+            {% for song in songs | sort(attribute='title') %}
+              {% if song.genre == genre[0] %}
+                <div class="box-sm">
+                  <em>{{ song.title }}</em><br /><br />
+                  <audio controls>
+                    <source src="{{ url_for('static', filename='audio/' + song.filename) }}" type="audio/mpeg">
+                  </audio><br />
+                  <a href="{{ url_for('song_details', id=song.id) }}" class="btn btn-info btn-sm">Read Lyrics</a>
+                </div>
+              {%endif%}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+  </body>
+</html>

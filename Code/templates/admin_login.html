@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administrator</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/static/styles/login_page.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/music-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/music-16.png">
+  </head>
+  <body>
+    <div class="header">
+      <h3 style="margin: 0 auto; text-align: left">
+        Music Streaming Application
+      </h3>
+    </div>
+    <hr style="margin: 5px;"/>
+    <h2 style="padding-bottom: 15px; margin-top: 50px">Administrator Login</h2>
+    <div class="centered" style="margin-top: auto">
+      <form method="POST" action="{{ url_for('admin_login') }}">
+        <div class="mb-3">
+          <label for="user" class="form-label">Username</label>
+          <input type="text" class="form-control" id="user" name="username" required/>
+          <label for="pass" class="form-label">Password</label>
+          <input type="password" class="form-control" id="pass" name="password" required/>
+          <div class="msg">
+            {% if error %}
+            <p style="margin: 0px">{{ error }}</p>
+            {% endif %}
+          </div>
+          <div class="centered" 
+               style="height: 50px; margin-top: 20px; margin-bottom: 10px; flex-wrap: nowrap;">
+            <input type="submit" value="Login" class="btn btn-primary bt-md" />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="form-text">
+      Don't have admin access? Go to
+      <a href="{{ url_for('user_login') }}" style="text-decoration: none; color: brown">User Login</a>
+    </div>
+  </body>
+</html>
